@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+    <script>
+        var myApp = angular.module('myApp', []);
+
+        myApp.directive('fileModel', ['$parse', function ($parse) {
+            return {
+                restrict: 'A',
+                require:'?ngChange',
+                link: function(scope, element, attrs) {
+                    var model = $parse(attrs.fileModel);
+                    var modelSetter = model.assign;
+
+                    element.bind('change', function(){
+                        scope.$apply(function(){
+                            modelSetter(scope, element[0].files[0]);
+                        });
+                    });
+                }
+            };
+        }]);
+
+
+        //code for filetype
+
+
+
+
+
+
+
+
+    myApp.controller('myCtrl', ['$scope',  function($scope){
+
+      $scope.encodeImageFileAsURL = function(){
+
+            //var filesSelected = angular.element("inputFileToLoad").files;
+          //console.log("files",filesSelected);
+           // if (filesSelected.length > 0)
+            //{
+          /*      var fileToLoad = filesSelected[0];
+                var fileReader = new FileReader();
+                fileReader.onload = function(fileLoadedEvent) {
+                    var srcData = fileLoadedEvent.target.result; // <--- data: base64
+                    console.log('srcData::',srcData);
+                    var newImage = document.createElement('img');
+                    newImage.src = srcData;
+
+                    document.getElementById("imgTest").innerHTML = newImage.outerHTML;
+                    console.log("Converted Base64 version is "+document.getElementById("imgTest").innerHTML);
+                }
+                fileReader.readAsDataURL(fileToLoad);*/
+            //}
+        }
+
+        }]);
+
+    </script>
+</head>
+<body ng-app="myApp" >
+<div ng-controller = "myCtrl">
+    <input type="file" file-model="myFile"/>
+    <img ng-src="{{url}}">
+    <button ng-click="uploadFile()">upload me</button>
+<input id="inputFileToLoad" type="file" ng-change="encodeImageFileAsURL()" >
+        <div id="imgTest"></div>
+</div>
+</body>
+</html>
